@@ -1,0 +1,58 @@
+version: '3.9'
+
+services:
+  frontend:
+    build:
+      context: ./opsci-strapi-frontend
+    ports:
+      - "5174:80"
+    depends_on:
+      - backend
+    networks:
+      - strapi-net
+
+  backend:
+    build:
+      context: ./Projet-DevOps/DevOps
+      dockerfile: Dockerfile
+    container_name: strapi-backend
+    ports:
+      - "1337:1337"
+    environment:
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: strapi-pg
+      DATABASE_PORT: 5432
+      DATABASE_NAME: strapi
+      DATABASE_USERNAME: strapi
+      DATABASE_PASSWORD: strapi
+      JWT_SECRET: supersecretkey
+      ADMIN_JWT_SECRET: superadminsecretkey
+      APP_KEYS: myappkey1,myappkey2
+    depends_on:
+      - strapi-pg
+    volumes:
+      - ./Projet-DevOps/DevOps:/opt/app:rw
+    working_dir: /opt/app
+    command: ["yarn", "develop"]
+    networks:
+      - strapi-net
+
+  strapi-pg:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: strapi
+      POSTGRES_USER: strapi
+      POSTGRES_PASSWORD: strapi
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - strapi-net
+
+volumes:
+  pg_data:
+
+networks:
+  strapi-net:

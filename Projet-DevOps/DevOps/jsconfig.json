@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "nodenext",
+    "module": "NodeNext",  // Ajoutez cette ligne
+    "target": "ES2021",
+    "checkJs": true,
+    "allowJs": true,
+    "esModuleInterop": true,  // Ajoutez cette ligne pour faciliter l'importation des modules
+    "skipLibCheck": true      // Ajoutez cette ligne pour ignorer certains types de vérification
+  }
+}
